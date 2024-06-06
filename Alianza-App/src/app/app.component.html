@@ -1,0 +1,13 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/clients">Clients</a>
+      <a mat-list-item>Client look history</a>
+      <a mat-list-item>Emergency PIN configuration</a>
+      <a mat-list-item>Emergency PIN history</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
