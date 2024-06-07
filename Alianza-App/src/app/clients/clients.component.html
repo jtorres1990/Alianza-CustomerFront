@@ -1,13 +1,13 @@
 <div class="toolbar">
   <button mat-raised-button color="primary" (click)="openDialog()">New</button>
-  <button mat-raised-button color="accent">Export</button>
+  <button mat-raised-button color="accent" (click)="exportToCsv()">Export</button>
 </div>
 
 <div class="search-bar">
   <mat-form-field>
-    <input matInput placeholder="Enter shared key">
+    <input matInput placeholder="Enter shared key" [(ngModel)]="sharedKey">
   </mat-form-field>
-  <button mat-raised-button>Search</button>
+  <button mat-raised-button (click)="searchClients()">Search</button>
   <button mat-raised-button>Advanced Search</button>
 </div>
 

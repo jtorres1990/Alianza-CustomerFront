@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ClientService } from '../services/client.service';
 import { Client } from '../models/client.model';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ClientDialogComponent } from '../client-dialog/client-dialog.component';
 
 @Component({
@@ -11,34 +11,91 @@ import { ClientDialogComponent } from '../client-dialog/client-dialog.component'
   styleUrls: ['./clients.component.css']
 })
 export class ClientsComponent implements OnInit {
+  displayedColumns: string[] = [
+    'id',
+    'sharedKey',
+    'businessId',
+    'email',
+    'phone',
+    'dateAdded',
+    'edit',
+  ];
+  dataSource: Client[] = [];
+  sharedKey: string = '';
 
-  displayedColumns: string[] = ['id', 'sharedKey', 'businessId', 'email', 'phone', 'dateAdded', 'edit'];
-  dataSource = new MatTableDataSource<Client>();
-
-  constructor(private clientService: ClientService, 
-    private dialog: MatDialog) { }
+  constructor(
+    private clientService: ClientService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
+    this.loadClients();
+  }
+
+  openDialog(): void {
+    const dialogRef: MatDialogRef<ClientDialogComponent> = this.dialog.open(
+      ClientDialogComponent,
+      {
+        width: '400px',
+      }
+    );
+
+    dialogRef.componentInstance.clientSaved.subscribe(() => {
+      this.loadClients();
+    });
+  }
+
+  loadClients(): void {
     this.clientService.getClients().subscribe(
-      clients => {
-        this.dataSource.data = clients;
+      (clients) => {
+        this.dataSource = clients;
       },
-      error => {
+      (error) => {
         console.error('Error fetching clients:', error);
       }
     );
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(ClientDialogComponent, {
-      width: '400px'
-    });
+  searchClients(): void {
+    if (this.sharedKey) {
+      this.clientService.searchClientsBySharedKey(this.sharedKey).subscribe(
+        (response) => {
+          if (!response.error) {
+            this.dataSource = response.response;
+          } else {
+            console.error('Error in response:', response.message);
+          }
+        },
+        (error) => {
+          console.error('Error searching clients:', error);
+        }
+      );
+    } else {
+      this.loadClients();
+    }
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log('Client data:', result);
-        // Aquí puedes manejar la lógica para guardar el nuevo cliente
-      }
-    });
+  exportToCsv(): void {
+    const csvData = this.convertToCSV(this.dataSource);
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'clients.csv');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  convertToCSV(data: Client[]): string {
+    const headers = this.displayedColumns.filter(col => col !== 'edit');  // Excluir la columna de edición
+    const rows = data.map(client => 
+      headers.map(header => (client as any)[header])
+    );
+    return [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
   }
 }

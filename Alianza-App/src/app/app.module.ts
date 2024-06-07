@@ -17,7 +17,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ClientsComponent } from './clients/clients.component';
 import { ClientDialogComponent } from './client-dialog/client-dialog.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ResponseDialogComponent } from './response-dialog/response-dialog.component';
+
 
 
 //import { AppRoutingModule } from './app-routing.module';
@@ -26,7 +28,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   declarations: [
     AppComponent,
     ClientsComponent,
-    ClientDialogComponent
+    ClientDialogComponent,
+    ResponseDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +47,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     FlexLayoutModule,
     MatIconModule,
     ReactiveFormsModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    FormsModule 
   ],
   providers: [],
   bootstrap: [AppComponent]

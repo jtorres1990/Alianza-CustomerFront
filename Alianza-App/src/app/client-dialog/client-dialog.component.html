@@ -2,8 +2,8 @@
 <mat-dialog-content>
   <form [formGroup]="clientForm">
     <mat-form-field appearance="fill">
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="name">
+      <mat-label>SharedKey</mat-label>
+      <input matInput formControlName="sharedKey">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Phone</mat-label>
@@ -14,16 +14,14 @@
       <input matInput formControlName="email">
     </mat-form-field>
     <mat-form-field appearance="fill">
+        <mat-label>BusinessId</mat-label>
+        <input matInput formControlName="businessId">
+      </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Start Date</mat-label>
-      <input matInput [matDatepicker]="startDatePicker" formControlName="startDate">
+      <input matInput [matDatepicker]="startDatePicker" formControlName="dateAdd">
       <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #startDatePicker></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>End Date</mat-label>
-      <input matInput [matDatepicker]="endDatePicker" formControlName="endDate">
-      <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #endDatePicker></mat-datepicker>
     </mat-form-field>
   </form>
 </mat-dialog-content>
